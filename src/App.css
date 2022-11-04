@@ -1,19 +1,20 @@
 .wrapper {
   display: grid;
   grid-template-columns: auto auto auto auto;
-  border: 2px solid black;
+  border: 2px solid #282828;
+  background-color: #928374;
   width: 80%;
   aspect-ratio: 1/1;
-  gap: 1%;
+  gap: 2%;
   margin-left: auto;
   margin-right: auto;
   margin-top: 40%;
   border-radius: 5%;
   padding: 1%;
+  padding-bottom: 2%;
 }
 
 .wrapper > .filled {
-  border: 2px solid red;
   border-radius: 20%;
   padding-top: 0.8em;
   font-size: 2em;
