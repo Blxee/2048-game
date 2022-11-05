@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './App.css';
 
 class Cell {
@@ -78,6 +78,45 @@ function App() {
       this.cells[this.size * y + x] = new Cell(value);
     },
   });
+
+  // const handleTouchEnd = useCallback()
+
+  useEffect(() => {
+    let previousX = 0, previousY = 0;
+    const threshhold = (window.screen.width >= window.screen.height ? window.screen.height : window.screen.width) / 10;
+
+    document.addEventListener('touchstart', event => {
+      previousX = event.changedTouches[0].screenX;
+      previousY = event.changedTouches[0].screenY;
+    });
+
+    document.addEventListener('touchend', event => {
+      const currentX = event.changedTouches[0].screenX;
+      const currentY = event.changedTouches[0].screenY;
+
+      const xDiff = previousX - currentX;
+      const yDiff = previousY - currentY;
+
+      if (Math.abs(xDiff) + Math.abs(yDiff) < threshhold) {
+        return;
+      }
+
+      if (Math.abs(xDiff) >= Math.abs(yDiff)) {
+        if (xDiff >= 0) {
+          alert('left')
+        } else {
+          alert('right')
+        }
+      } else {
+        if (yDiff >= 0) {
+          alert('up')
+        } else {
+          alert('down')
+        }
+      }
+    });
+
+  }, []);
 
   return (
     <div className='wrapper'>
