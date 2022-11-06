@@ -79,8 +79,6 @@ function App() {
     },
   });
 
-  // const handleTouchEnd = useCallback()
-
   useEffect(() => {
     let previousX = 0, previousY = 0;
     const threshhold = (window.screen.width >= window.screen.height ? window.screen.height : window.screen.width) / 10;
@@ -90,7 +88,7 @@ function App() {
       previousY = event.changedTouches[0].screenY;
     });
 
-    document.addEventListener('touchend', event => {
+    const listener = event => {
       const currentX = event.changedTouches[0].screenX;
       const currentY = event.changedTouches[0].screenY;
 
@@ -114,8 +112,11 @@ function App() {
           alert('down')
         }
       }
-    });
+    };
 
+    document.addEventListener('touchend', listener);
+
+    return () => document.removeEventListener('touchend', listener);
   }, []);
 
   return (
