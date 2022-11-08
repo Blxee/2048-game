@@ -35,7 +35,7 @@ class Cell {
   };
 
   constructor(number) {
-    this.number = number || 2;
+    this.number = number || 0;
   }
 
   getPrimaryColor() {
@@ -66,9 +66,9 @@ class Cell {
 
 function App() {
 
-  const [grid, setGrid] = useState({
+  const gridInit = {
     size: 4,
-    cells: Array(4 ** 2).fill(new Cell(2)),
+    cells: Array(4 ** 2).fill(new Cell()),
 
     get(x, y) {
       return this.cells[this.size * y + x];
@@ -77,7 +77,24 @@ function App() {
     set(x, y, value) {
       this.cells[this.size * y + x] = new Cell(value);
     },
-  });
+  };
+
+  const [grid, setGrid] = useState(gridInit);
+
+  function addNRandomCells(n) {
+    const avalaible = Array.from(grid.cells.keys())
+      .filter(index => grid.cells[index].isEmpty());
+    if (avalaible.length === 0)
+      return;
+    setGrid(({ ...grid }) => {
+      for (let i = 0; i < n; i++) {
+        const rand = Math.floor(Math.random() * avalaible.length);
+        const index = avalaible.splice(rand, 1).shift();
+        grid.cells[index] = new Cell(2);
+      }
+      return grid;
+    });
+  }
 
   useEffect(() => {
     let previousX = 0, previousY = 0;
@@ -116,7 +133,12 @@ function App() {
 
     document.addEventListener('touchend', listener);
 
-    return () => document.removeEventListener('touchend', listener);
+    if (grid.cells.filter(cell => !cell.isEmpty()) < 2)
+      addNRandomCells(2);
+
+    return () => {
+      document.removeEventListener('touchend', listener);
+    }
   }, []);
 
   return (
